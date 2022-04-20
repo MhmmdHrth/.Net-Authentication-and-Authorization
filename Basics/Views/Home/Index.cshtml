@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
+
+<h1>Home Page</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h1>User is Authenticated</h1>
+    foreach(var userIdentity in User.Identities)
+    {
+        <h1>@userIdentity.AuthenticationType</h1>
+        foreach(var claim in userIdentity.Claims)
+        {
+            <h4>@claim.Type</h4>
+            <small>@claim.Value</small>
+        }
+    }
+}
+else
+{
+    <h1>User not Authenticated</h1>
+}
+
+@if((await authorizationService.AuthorizeAsync(User, "Basic.Policy")).Succeeded){
+    <h1>User has DOB Claim</h1>
+}
